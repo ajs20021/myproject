@@ -1,0 +1,16 @@
+---
+title: "my project and dataset"
+author: "Jack Sutton"
+date: "2024-10-10"
+output: "github_document"
+---
+
+
+
+```{r}
+library(haven)
+library(dplyr)
+library(ggplot2)
+
+```
+
