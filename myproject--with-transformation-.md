@@ -3,11 +3,8 @@ my project and dataset
 Jack Sutton
 2024-10-10
 
-<<<<<<< HEAD
 # Is the relationship between peer influence and relational aggression different between young men and women?
 
-=======
->>>>>>> d6def72af1f972a35652c47475b8651f293dbf4b
 # load packages
 
 ``` r
@@ -28,7 +25,6 @@ library(dplyr)
 
 ``` r
 library(ggplot2)
-<<<<<<< HEAD
 library(tidyr)
 library(psych)
 ```
@@ -92,18 +88,17 @@ library(performance)
 library(sjPlot)
 ```
 
-# load
+    ## #refugeeswelcome
+
+\<\<\<\<\<\<\< HEAD \# load
 
 ``` r
 load("C:/Users/ajsut/Documents/GitHub/myproject/36850-0003-Data.rda")
-=======
->>>>>>> d6def72af1f972a35652c47475b8651f293dbf4b
 ```
 
 # ignore other variables
 
 ``` r
-<<<<<<< HEAD
 new_dataset <- da36850.0003 %>%
   select(RESPEERT2, RELAGGT2, DEMGEN2)
 ```
@@ -174,13 +169,13 @@ shapiro.test(list_new_dataset$RELAGGT2)
 ggplot(list_new_dataset, aes(x = RELAGGT2)) + geom_histogram(binwidth = 1)+ theme_light()
 ```
 
-![](myproject_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 ggplot(list_new_dataset, aes(x = RELAGGT2)) + geom_density(adjust = 2)  + theme_classic()
 ```
 
-![](myproject_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
 ``` r
 qq<-ggplot(list_new_dataset, aes(sample = RELAGGT2)) + geom_qq()  + theme_classic()
@@ -188,9 +183,9 @@ qq<-ggplot(list_new_dataset, aes(sample = RELAGGT2)) + geom_qq()  + theme_classi
 qq+ geom_qq_line()
 ```
 
-![](myproject_files/figure-gfm/unnamed-chunk-7-3.png)<!-- --> Result of
-Shapiro-Wilk test indicates a low W-Value of 0.57438 and a p-value of
-p-value \< 2.2e-16. This means that the distribution is very
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+Result of Shapiro-Wilk test indicates a low W-Value of 0.57438 and a
+p-value of p-value \< 2.2e-16. This means that the distribution is very
 significantly non-normal. GGplot also indicates a positive skew, it is
 visually non-normal.
 
@@ -239,7 +234,7 @@ model<-lm(RELAGGT2 ~ RESPEERT2 + DEMGEN2, data = list_new_dataset)
 check_model(model)
 ```
 
-![](myproject_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 \#assumption of colinearity is met (\<5)
 
@@ -266,7 +261,7 @@ Corr(list_new_dataset)
     ## RELAGGT2-DEMGEN2    -0.09 [-0.16, -0.02]  .013 *   729
     ## ──────────────────────────────────────────────────────
 
-![](myproject_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
     ## Correlation matrix is displayed in the RStudio `Plots` Pane.
 
@@ -361,10 +356,10 @@ ggplot(list_new_dataset, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() + geom
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
-![](myproject_files/figure-gfm/unnamed-chunk-12-1.png)<!-- --> Research
-Question, First Analysis Interpretation \#My research question is
-whether men and women differ significantly in the extent to which peer
-influence relates to relational aggression behaviors. From this
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+Research Question, First Analysis Interpretation \#My research question
+is whether men and women differ significantly in the extent to which
+peer influence relates to relational aggression behaviors. From this
 correlation, we can interpret that men are less resistant to peer
 influence may relate to more relational aggression compared to women. We
 can see the same pattern in the plots. The line is clearly steeper for
@@ -455,78 +450,12 @@ ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() 
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
-![](myproject_files/figure-gfm/unnamed-chunk-14-1.png)<!-- --> Second
-Analysis Interpretation \#Comparing the same relationship in terms of
-being white or non-white… both groups show this significacnt
+![](myproject--with-transformation-_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+Second Analysis Interpretation \#Comparing the same relationship in
+terms of being white or non-white… both groups show this significacnt
 relationship. Both are significant, however those who are not white show
 a slightly greater inverse relationship than those who are white. This
 could be interpreted as non-white people may be more influenced by peers
 in turn relating to greater relational aggression. Again, in the plots,
 the line is visually steeper for non-white participants than white
 participants. Meaning the relationship was stronger in that group.
-=======
-#new_dataset <- dataset %>%
- # select(variable 1, variable 2, variable 3)
-```
-
-# possibly recoding variables
-
-May need to recode from numeric to characters(in case of nominal
-entries), or from numeric to numeric (to swap reverse coded entries)
-
-\#creating composites Taken from Lab3, either average across rows or get
-sum of entries.
-
-``` r
-#Change lab3 directory to my dataset, change RSE vars to my own variables.
-
-#lab3data <- lab3data %>%
- # mutate(RSE = rowMeans(cbind(RSE1, RSE2_R, RSE3, RSE4, RSE5_R, RSE6_R, RSE7, RSE8_R, RSE9_R, RSE10)))
-
-#This function used to get the sum of a row
-#lab3data <- lab3data %>%
-  #mutate(SWL = rowSums(cbind(SWL1, SWL2, SWL3, SWL4, SWL5)))
-```
-
-\#normality check of the variables\*\* if the p-value exceeds .05 = not
-normal remember to change lab specific directories to the current data
-set…
-
-``` r
-#Use the describeBy() function to get skewness and kurtosis by group
-
-#?describeBy()
-
-#describeBy(Performance ~ Group, data = lab4data)
-
-#Use the group by function to get shapiro test results by group
-#lab4data %>%
-#  group_by(Group) %>%
- # summarize(W = shapiro.test(Performance)$statistic, p_value = shapiro.test(Performance)$p.value)
-```
-
-\#equal variance check for DV, RQ type 1 difference –\> do mena nd women
-have diff self-esteem RQ type 1 outcome –\> what can predict
-self-esteem? GPA?
-
-If I have an outcome question I don’t need to check equal variance.
-
-``` r
-#leveneTest(Performance~Group, lab4data)
-
-#MANOVA(lab4data, dv = "Performance", between = "Group")
-
-#What if you want to test equal variance between 2 groups specifically? 
-
-#lab4dataConG1<-lab4data %>%
- # filter(Group == "Control" | Group == "G1")
-
-#leveneTest(Performance~Group, lab4dataConG1)
-```
-
-\#If any assumptions are violated I would transform the data according
-to the formulas/codes covered in lab 4. Mursal and I are gonna visualize
-each other’s data to visually check for normality after transforming as
-well. We both had some problems with lab 4 so we figured we’d help each
-other get our code for this section right.
->>>>>>> d6def72af1f972a35652c47475b8651f293dbf4b

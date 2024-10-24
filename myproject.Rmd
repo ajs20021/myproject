@@ -21,6 +21,7 @@ library(sjPlot)
 
 ```
 
+<<<<<<< HEAD
 # load
 ```{r}
 load("C:/Users/ajsut/Documents/GitHub/myproject/36850-0003-Data.rda")
@@ -135,4 +136,3 @@ ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() 
 ```
 Second Analysis Interpretation
 #Comparing the same relationship in terms of being white or non-white... both groups show this significacnt relationship. Both are significant, however those who are not white show a slightly greater inverse relationship than those who are white. This could be interpreted as non-white people may be more influenced by peers in turn relating to greater relational aggression. Again, in the plots, the line is visually steeper for non-white participants than white participants. Meaning the relationship was stronger in that group.
-

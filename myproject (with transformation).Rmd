@@ -14,9 +14,14 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(psych)
+library(bruceR)
+library(ggstatsplot)
+library(performance)
+library(sjPlot)
 
 ```
 
+<<<<<<< HEAD
 # load
 ```{r}
 load("C:/Users/ajsut/Documents/GitHub/myproject/36850-0003-Data.rda")
@@ -73,43 +78,61 @@ list_new_dataset %>%
 
 ```
 
-#For both males and females, the p-value results of the shapiro-wilk test are each extremely small. These are significantly not normal since they do not come close to exceeding .05.
-
+#For both males and females, the results of skew tests indicate a positive right skew above +1. Kurtosis tests indicated that the extent of the skew for each group will result in a high frequency of extreme values.
 
 #equal variance check for DV not necessasry since my question is an outcome, not a simple difference.
-#next, transform data to bring it closer to normality using log.
-#There are meaningful zeros ("never" on questionnaire) that I need to adjust in order to make the log transformation work. Here, I apply a constant to them (all entries +1) to make it log suitable.
+#correlation testing does not require normality so I can move on to testing... but first some assumption checks
 
+
+#LAB 8 STARTS HERE
 ```{r}
-list_new_dataset$RELAGGT2 <- list_new_dataset$RELAGGT2 + 1
+model<-lm(RELAGGT2 ~ RESPEERT2 + DEMGEN2, data = list_new_dataset)
 
-```
-#now, all values under RELAGGT2 in list_new_dataset have a +1 applied. Remember this later when interpreting
-
-
-```{r}
-list_new_dataset$RELAGGT2_log <- log10(list_new_dataset$RELAGGT2)
-ggplot(list_new_dataset, aes(x = RELAGGT2_log))+ geom_histogram(binwidth = .2)+ theme_light()
-
-```
-still not normal...
-
-The following chunk produces the same... even without adding constant first.
-
-Maybe a square root transformation???
-
-```{r}
-sqrt_data <- sqrt(list_new_dataset$RELAGGT2)
-hist(sqrt_data, main = "sqrt transformed RELAGG", xlab = "sqrt values", col = "lightpink", breaks = 20)
-qqnorm(sqrt_data)
-qqline(sqrt_data, col = "red")
-```
-
-```{r}
-PROCESS(data, y = "DV", x = "IV", mods = c("group"))
+check_model(model)
 
 ```
 
+#assumption of colinearity is met (<5)
+
+
+#all of the below tests are correlations. I ran a correlation to see the relation between my IV and DV, then I ran the same tests for gender, and race (white, nonwhite) to see whether the correlation differs in those groups.
+
+#first check is if RELAGGT2 is related to RESPEERT2 without any grouping variable... 
 ```{r}
-geom_smooth with facet_wrap
+Corr(list_new_dataset)
 ```
+#Initial correlation shows resistance to peer influence is significantly inversely correlated with relational aggression. As resistance to peer influence increases, relational aggression decreases and as resistance to peer influence decreases, relational aggression increases (r= -.25).
+
+#now, to test this correlation on the grouping variable of gender...
+```{r}
+PROCESS(list_new_dataset, y = "RELAGGT2", x = "RESPEERT2", mods = c("DEMGEN2"))
+```
+
+#These results indicate that there is a significant difference for the peer influence and relational aggression relationship between men and women. For men, this relationship is significantly inversely related (r=-.249). For women, it is inversely related as well, but not to a significant extent (r=-.091).
+#let's visualize...
+
+```{r}
+
+ggplot(list_new_dataset, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() + geom_smooth(method=lm) + facet_wrap(~DEMGEN2) + theme_bruce()
+
+```
+Research Question, First Analysis Interpretation
+#My research question is whether men and women differ significantly in the extent to which peer influence relates to relational aggression behaviors. From this correlation, we can interpret that men are less resistant to peer influence may relate to more relational aggression compared to women. We can see the same pattern in the plots. The line is clearly steeper for men.
+
+#now I'll try this with a different grouping variable...
+```{r}
+#get the excluded variables back and select new ones...
+new_dataset_white <- da36850.0003 %>%
+  select(RESPEERT2, RELAGGT2, DEMRA2010)
+#exclude NA
+list_new_dataset_white <- drop_na(new_dataset_white)
+#check correlation
+PROCESS(list_new_dataset_white, y = "RELAGGT2", x = "RESPEERT2", mods = c("DEMRA2010"))
+```
+```{r}
+ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() + geom_smooth(method=lm) + facet_wrap(~DEMRA2010) + theme_bruce()
+
+
+```
+Second Analysis Interpretation
+#Comparing the same relationship in terms of being white or non-white... both groups show this significacnt relationship. Both are significant, however those who are not white show a slightly greater inverse relationship than those who are white. This could be interpreted as non-white people may be more influenced by peers in turn relating to greater relational aggression. Again, in the plots, the line is visually steeper for non-white participants than white participants. Meaning the relationship was stronger in that group.
