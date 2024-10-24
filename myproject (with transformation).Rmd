@@ -1,0 +1,115 @@
+---
+title: "my project and dataset"
+author: "Jack Sutton"
+date: "2024-10-10"
+output: "github_document"
+---
+
+# Is the relationship between peer influence and relational aggression different between young men and women?
+
+# load packages
+```{r}
+library(haven)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(psych)
+
+```
+
+# load
+```{r}
+load("C:/Users/ajsut/Documents/GitHub/myproject/36850-0003-Data.rda")
+```
+
+# ignore other variables
+```{r}
+new_dataset <- da36850.0003 %>%
+  select(RESPEERT2, RELAGGT2, DEMGEN2)
+```
+# RESPEERT2 is a premade composite of Revised Peer Influence Scale Items with reverse codings corrected. 1 represents low peer resistance, 4 represents high peer resistance.
+# RELAGGT2 is a premade composite of Relational Aggression, 1 Represents low tendency towards relational aggression, 4 represents high tendency towards relational aggression.
+# DEMGEN2 is a grouping variable by gender demographic.
+
+```{r}
+summary(new_dataset)
+```
+#summary indicates NA values for some variables.
+```{r}
+list_new_dataset <- drop_na(new_dataset)
+```
+#NA are dropped listwise to clean data. Participants with NA entries on any variable are omitted from the dataset.
+
+```{r}
+summary(list_new_dataset)
+```
+#Summary indicates no more missing values in new dataset (list_new_dataset)
+
+#normality check of the variables, Shapiro-Wilk and GGPlot
+```{r}
+describe(list_new_dataset$RELAGGT2)
+shapiro.test(list_new_dataset$RELAGGT2)
+
+ggplot(list_new_dataset, aes(x = RELAGGT2)) + geom_histogram(binwidth = 1)+ theme_light()
+
+ggplot(list_new_dataset, aes(x = RELAGGT2)) + geom_density(adjust = 2)  + theme_classic()
+
+qq<-ggplot(list_new_dataset, aes(sample = RELAGGT2)) + geom_qq()  + theme_classic()
+
+qq+ geom_qq_line()
+```
+Result of Shapiro-Wilk test indicates a low W-Value of 0.57438 and a p-value of p-value < 2.2e-16. This means that the distribution is very significantly non-normal.
+GGplot also indicates a positive skew, it is visually non-normal.
+
+
+#Use the describeBy() function to get skewness and kurtosis by group
+```{r}
+describeBy(RELAGGT2 ~ DEMGEN2, data = list_new_dataset)
+
+list_new_dataset %>%
+  group_by(DEMGEN2) %>%
+  summarize(W = shapiro.test(RELAGGT2)$statistic, p_value = shapiro.test(RELAGGT2)$p.value)
+
+
+```
+
+#For both males and females, the p-value results of the shapiro-wilk test are each extremely small. These are significantly not normal since they do not come close to exceeding .05.
+
+
+#equal variance check for DV not necessasry since my question is an outcome, not a simple difference.
+#next, transform data to bring it closer to normality using log.
+#There are meaningful zeros ("never" on questionnaire) that I need to adjust in order to make the log transformation work. Here, I apply a constant to them (all entries +1) to make it log suitable.
+
+```{r}
+list_new_dataset$RELAGGT2 <- list_new_dataset$RELAGGT2 + 1
+
+```
+#now, all values under RELAGGT2 in list_new_dataset have a +1 applied. Remember this later when interpreting
+
+
+```{r}
+list_new_dataset$RELAGGT2_log <- log10(list_new_dataset$RELAGGT2)
+ggplot(list_new_dataset, aes(x = RELAGGT2_log))+ geom_histogram(binwidth = .2)+ theme_light()
+
+```
+still not normal...
+
+The following chunk produces the same... even without adding constant first.
+
+Maybe a square root transformation???
+
+```{r}
+sqrt_data <- sqrt(list_new_dataset$RELAGGT2)
+hist(sqrt_data, main = "sqrt transformed RELAGG", xlab = "sqrt values", col = "lightpink", breaks = 20)
+qqnorm(sqrt_data)
+qqline(sqrt_data, col = "red")
+```
+
+```{r}
+PROCESS(data, y = "DV", x = "IV", mods = c("group"))
+
+```
+
+```{r}
+geom_smooth with facet_wrap
+```
