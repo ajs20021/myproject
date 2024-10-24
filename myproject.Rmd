@@ -119,7 +119,7 @@ ggplot(list_new_dataset, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() + geom
 Research Question, First Analysis Interpretation
 #My research question is whether men and women differ significantly in the extent to which peer influence relates to relational aggression behaviors. From this correlation, we can interpret that men are less resistant to peer influence may relate to more relational aggression compared to women. We can see the same pattern in the plots. The line is clearly steeper for men.
 
-#now I'll try this with a different grouping variable...
+# now I'll try this with a different grouping variable...
 ```{r}
 #get the excluded variables back and select new ones...
 new_dataset_white <- da36850.0003 %>%
@@ -137,4 +137,4 @@ ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() 
 
 ```
 Second Analysis Interpretation
-#Comparing the same relationship in terms of being white or non-white... both groups show this significacnt relationship. Both are significant, however those who are not white show a slightly greater inverse relationship than those who are white. This could be interpreted as non-white people may be more influenced by peers in turn relating to greater relational aggression. Again, in the plots, the line is visually steeper for non-white participants than white participants. Meaning the relationship was stronger in that group.
+# Comparing the same relationship in terms of being white or non-white... both groups show this significacnt relationship. Both are significant, however those who are not white show a slightly greater inverse relationship than those who are white. This could be interpreted as non-white people may be more influenced by peers in turn relating to greater relational aggression. Again, in the plots, the line is visually steeper for non-white participants than white participants. Meaning the relationship was stronger in that group.
