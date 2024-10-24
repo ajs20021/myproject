@@ -129,6 +129,8 @@ list_new_dataset_white <- drop_na(new_dataset_white)
 #check correlation
 PROCESS(list_new_dataset_white, y = "RELAGGT2", x = "RESPEERT2", mods = c("DEMRA2010"))
 ```
+
+
 ```{r}
 ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() + geom_smooth(method=lm) + facet_wrap(~DEMRA2010) + theme_bruce()
 
