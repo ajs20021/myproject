@@ -7,6 +7,15 @@ output: "github_document"
 
 # Is the relationship between peer influence and relational aggression different between young men and women?
 
+
+
+#troubleshooting chunk
+```{r}
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+
+
+```
+
 # load packages
 ```{r}
 library(haven)
@@ -138,3 +147,66 @@ ggplot(list_new_dataset_white, aes(x = RESPEERT2, y = RELAGGT2)) + geom_point() 
 ```
 Second Analysis Interpretation
 # Comparing the same relationship in terms of being white or non-white... both groups show this significacnt relationship. Both are significant, however those who are not white show a slightly greater inverse relationship than those who are white. This could be interpreted as non-white people may be more influenced by peers in turn relating to greater relational aggression. Again, in the plots, the line is visually steeper for non-white participants than white participants. Meaning the relationship was stronger in that group.
+
+LAB10 STARTS HERE --> RELIABILITY CHECKS OF MY OWN DATA AND FACTOR ANALYSES,
+#first, I need to get the original items for my composites, since the composites were premade in the dataset. This is why I clean the greater dataset here:
+
+```{r}
+new_dataset_allitems <- da36850.0003 %>%
+  select(REPEIN201, REPEIN202, REPEIN203, REPEIN204, REPEIN205, REPEIN206, REPEIN207, REPEIN208, REPEIN209, REPEIN210, PBFS202, PBFS205, PBFS207, PBFS217, PBFS221, PBFS224, PBFS225)
+
+```
+#and to drop any N/A values...
+```{r}
+list_new_dataset_allitems <- drop_na(new_dataset_allitems)
+```
+
+#list_new_dataset is the set with just the composites.
+#now we work with all the individual items under list_new_dataset_allitems 
+
+#B1 Relational Aggression is the construct for the RELAGGT2 variable. Its composite is measured across 7 items.
+```{R}
+#Test reliability of scale variables.
+#Reliability of RELAGGT2 (Relational Aggression)
+Alpha(list_new_dataset_allitems, vars=c("PBFS202", "PBFS205", "PBFS207", "PBFS217", "PBFS221", "PBFS224", 
+"PBFS225"))
+```
+#C1
+#For relational aggression, a cronbach's alpha of .766 demonstrates good reliability. There is high internal consistency between items in this scale.
+
+
+#B2 Resistance to Peer Influence is the construct for the RESPEERT2 variable. Its composite is measured across 10 items.
+```{R}
+
+#Reliability of RESPEERT2 (Resistance to Peer Influence)
+Alpha(list_new_dataset_allitems, vars=c("REPEIN201", "REPEIN202", "REPEIN203", "REPEIN204", "REPEIN205", "REPEIN206", "REPEIN207", "REPEIN208", "REPEIN209", "REPEIN210"))
+```
+
+#C2
+#For resistance to peer influence, a cronbach's alpha of .794 demonstrates good reliability. There is high internal consistency between items in this scale.
+
+
+#D1
+#Factor anaysis of Relational Aggression (RELAGGT2)
+```{r}
+EFA(list_new_dataset_allitems, vars=c("PBFS202", "PBFS205", "PBFS207", "PBFS217", "PBFS221", "PBFS224", "PBFS225"), method = "pa", plot.scree = TRUE, nfactors = c("parallel"))
+
+
+
+
+```
+#Factor analysis of Relational Aggression reveals just one factor (PBFS205) because its eigenvalue is above 1, its point is on the slope not the the scree/flat, and it is above the parallel. With the highest loading of .717, about 71% of variance in the Relational Aggression varaible may be explained by this item. The range of all loadings is between .717 and .477.
+
+#E1
+#Overall, this range and its high end suggests this variable has good measurement validity. All items are above .4 and most are close to 1.
+
+#D2
+#Factor anaysis of Resistance to Peer Influence (RESPEERT2)
+```{r}
+EFA(list_new_dataset_allitems, vars=c("REPEIN201", "REPEIN202", "REPEIN203", "REPEIN204", "REPEIN205", "REPEIN206", "REPEIN207", "REPEIN208", "REPEIN209", "REPEIN210"), method = "pa", plot.scree = TRUE, nfactors = c("parallel"))
+```
+
+#Factor analysis of Resistance to Peer Influence reveals 2 factors (REPEIN209, REPEIN204) because its eigenvalues are above 1, its points are on the slope not the the scree/flat, and they sit above the parallel. The range of all loadings is between .677 and .337.
+
+#E2
+#One item is a poor predictor of variance, but the others are above .4 and more than half of the items are above .5 so I would say there is acceptable measurement validity for this variable.
